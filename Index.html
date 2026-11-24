@@ -1,1 +1,497 @@
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#07110d">
+
+<title>BANSI STEP COUNT</title>
+
+<style>
+* {
+  box-sizing: border-box;
+}
+
+:root {
+  --bg: #07110d;
+  --card: #101d17;
+  --green: #b6ff55;
+  --text: #f5fff7;
+  --muted: #a4b6aa;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: Arial, sans-serif;
+}
+
+.container {
+  max-width: 500px;
+  margin: auto;
+  padding: 20px;
+}
+
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+}
+
+.logo {
+  font-size: 20px;
+  font-weight: 900;
+}
+
+.logo span {
+  color: var(--green);
+}
+
+.tag {
+  color: var(--green);
+  font-size: 10px;
+}
+
+h1 {
+  font-size: 30px;
+  margin-bottom: 8px;
+}
+
+.subtitle {
+  color: var(--muted);
+  margin-bottom: 25px;
+}
+
+.card {
+  background: var(--card);
+  border: 1px solid #20352a;
+  border-radius: 24px;
+  padding: 22px;
+  margin-bottom: 15px;
+}
+
+.counter {
+  text-align: center;
+}
+
+.circle {
+  width: 220px;
+  height: 220px;
+  margin: 10px auto 20px;
+  border-radius: 50%;
+  background: conic-gradient(
+    var(--green) 0deg,
+    #26382c 0deg
+  );
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.inner {
+  width: 195px;
+  height: 195px;
+  border-radius: 50%;
+  background: var(--bg);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.steps {
+  font-size: 45px;
+  font-weight: 900;
+}
+
+.label {
+  color: var(--muted);
+  font-size: 12px;
+  margin-top: 8px;
+}
+
+.goal {
+  color: var(--muted);
+  margin-bottom: 20px;
+}
+
+button {
+  width: 100%;
+  padding: 15px;
+  border: none;
+  border-radius: 14px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  margin-bottom: 10px;
+}
+
+.start {
+  background: var(--green);
+  color: #14210b;
+}
+
+.reset {
+  background: #22352a;
+  color: white;
+}
+
+.status {
+  color: var(--muted);
+  font-size: 12px;
+  margin-top: 8px;
+}
+
+.stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.stat {
+  background: var(--card);
+  border: 1px solid #20352a;
+  border-radius: 18px;
+  padding: 17px;
+}
+
+.stat-title {
+  color: var(--muted);
+  font-size: 12px;
+  margin-bottom: 10px;
+}
+
+.stat-value {
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.unit {
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.progress {
+  height: 10px;
+  background: #26382c;
+  border-radius: 20px;
+  overflow: hidden;
+  margin-top: 15px;
+}
+
+.bar {
+  height: 100%;
+  width: 0%;
+  background: var(--green);
+  transition: width 0.2s;
+}
+
+footer {
+  text-align: center;
+  color: var(--muted);
+  font-size: 12px;
+  margin-top: 25px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<header>
+  <div class="logo">
+    BANSI <span>STEP COUNT</span>
+  </div>
+  <div class="tag">FITNESS APP</div>
+</header>
+
+<h1>Your Daily<br>
+<span style="color:#b6ff55">Movement.</span></h1>
+
+<p class="subtitle">
+  Har kadam tumhari progress hai.
+</p>
+
+<div class="card counter">
+
+  <div class="circle" id="circle">
+    <div class="inner">
+      <div class="steps" id="steps">0</div>
+      <div class="label">STEPS TODAY</div>
+    </div>
+  </div>
+
+  <div class="goal">
+    Daily Goal: 10,000 Steps
+  </div>
+
+  <button class="start" id="start">
+    START COUNTING
+  </button>
+
+  <button class="reset" id="reset">
+    RESET TODAY
+  </button>
+
+  <div class="status" id="status">
+    Start par tap karke counting shuru karo.
+  </div>
+
+</div>
+
+<div class="stats">
+
+  <div class="stat">
+    <div class="stat-title">DISTANCE</div>
+    <div class="stat-value">
+      <span id="distance">0.00</span>
+      <span class="unit">km</span>
+    </div>
+  </div>
+
+  <div class="stat">
+    <div class="stat-title">CALORIES</div>
+    <div class="stat-value">
+      <span id="calories">0</span>
+      <span class="unit">kcal</span>
+    </div>
+  </div>
+
+  <div class="stat">
+    <div class="stat-title">WALK TIME</div>
+    <div class="stat-value">
+      <span id="minutes">0</span>
+      <span class="unit">min</span>
+    </div>
+  </div>
+
+  <div class="stat">
+    <div class="stat-title">GOAL COMPLETED</div>
+    <div class="stat-value">
+      <span id="percent">0</span>
+      <span class="unit">%</span>
+    </div>
+  </div>
+
+</div>
+
+<div class="card" style="margin-top:15px">
+
+  <b>Daily Progress</b>
+
+  <div class="label" id="progressText">
+    0 / 10,000 steps
+  </div>
+
+  <div class="progress">
+    <div class="bar" id="bar"></div>
+  </div>
+
+</div>
+
+<footer>
+  BANSI STEP COUNT<br>
+  WALK • TRACK • IMPROVE
+</footer>
+
+</div>
+
+<script>
+const goal = 10000;
+
+let steps = 0;
+let running = false;
+let lastStep = 0;
+let lastMagnitude = 0;
+
+let startTime = 0;
+let elapsedTime = 0;
+let timer = null;
+
+const $ = id => document.getElementById(id);
+
+function updateDisplay() {
+
+  const percent = Math.min(
+    100,
+    Math.round(steps / goal * 100)
+  );
+
+  const distance = steps * 0.0007;
+  const calories = Math.round(steps * 0.04);
+
+  const time = elapsedTime +
+    (running ? Date.now() - startTime : 0);
+
+  $("steps").textContent =
+    steps.toLocaleString("en-IN");
+
+  $("distance").textContent =
+    distance.toFixed(2);
+
+  $("calories").textContent =
+    calories.toLocaleString("en-IN");
+
+  $("minutes").textContent =
+    Math.floor(time / 60000);
+
+  $("percent").textContent = percent;
+
+  $("progressText").textContent =
+    steps.toLocaleString("en-IN") +
+    " / 10,000 steps";
+
+  $("bar").style.width = percent + "%";
+
+  $("circle").style.background =
+    `conic-gradient(
+      #b6ff55 ${percent * 3.6}deg,
+      #26382c 0deg
+    )`;
+}
+
+function detectStep(event) {
+
+  if (!running) return;
+
+  const acceleration =
+    event.accelerationIncludingGravity;
+
+  if (!acceleration) return;
+
+  const x = acceleration.x || 0;
+  const y = acceleration.y || 0;
+  const z = acceleration.z || 0;
+
+  const magnitude = Math.sqrt(
+    x * x + y * y + z * z
+  );
+
+  const now = Date.now();
+
+  if (
+    magnitude > 11.8 &&
+    lastMagnitude <= 11.8 &&
+    now - lastStep > 300
+  ) {
+
+    steps++;
+    lastStep = now;
+
+    updateDisplay();
+  }
+
+  lastMagnitude = magnitude;
+}
+
+async function startCounting() {
+
+  if (running) {
+    stopCounting();
+    return;
+  }
+
+  if (!("DeviceMotionEvent" in window)) {
+
+    $("status").textContent =
+      "Motion sensor support nahi hai.";
+
+    return;
+  }
+
+  try {
+
+    if (
+      typeof DeviceMotionEvent.requestPermission
+      === "function"
+    ) {
+
+      const permission =
+        await DeviceMotionEvent.requestPermission();
+
+      if (permission !== "granted") {
+
+        $("status").textContent =
+          "Motion permission allow karo.";
+
+        return;
+      }
+    }
+
+    running = true;
+    startTime = Date.now();
+
+    window.addEventListener(
+      "devicemotion",
+      detectStep
+    );
+
+    $("start").textContent = "PAUSE COUNTING";
+
+    $("status").textContent =
+      "Counting chal rahi hai!";
+
+    timer = setInterval(updateDisplay, 1000);
+
+    updateDisplay();
+
+  } catch (error) {
+
+    $("status").textContent =
+      "Sensor permission nahi mili.";
+  }
+}
+
+function stopCounting() {
+
+  if (!running) return;
+
+  elapsedTime += Date.now() - startTime;
+
+  running = false;
+
+  window.removeEventListener(
+    "devicemotion",
+    detectStep
+  );
+
+  clearInterval(timer);
+
+  $("start").textContent = "RESUME COUNTING";
+
+  $("status").textContent =
+    "Counting pause hai.";
+
+  updateDisplay();
+}
+
+$("start").addEventListener(
+  "click",
+  startCounting
+);
+
+$("reset").addEventListener("click", () => {
+
+  stopCounting();
+
+  steps = 0;
+  elapsedTime = 0;
+  lastStep = 0;
+  lastMagnitude = 0;
+
+  $("status").textContent =
+    "Count reset ho gaya.";
+
+  updateDisplay();
+});
+
+updateDisplay();
+</script>
+
+</body>
+  </html>
+  
